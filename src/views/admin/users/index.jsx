@@ -6,11 +6,11 @@ import apiClient from '../../../services/api';
 
 export default function UsersIndex() {
   const [users, setUsers] = useState([]);
-  const token = Cookies.get('token');
-  apiClient.defaults.headers.common['Authorization'] = token;
 
   const fetchUsers = async () => {
+    const token = Cookies.get('token');
     if (token) {
+      apiClient.defaults.headers.common['Authorization'] = token;
       try {
         const response = await apiClient.get('/api/admin/users');
 
