@@ -6,13 +6,11 @@ import apiClient from '../../../services/api';
 
 export default function UsersIndex() {
   const [users, setUsers] = useState([]);
+  const token = Cookies.get('token');
+  apiClient.defaults.headers.common['Authorization'] = token;
 
   const fetchUsers = async () => {
-    const token = Cookies.get('token');
-
     if (token) {
-      apiClient.defaults.headers.common['Authorization'] = token;
-
       try {
         const response = await apiClient.get('/api/admin/users');
 
@@ -22,6 +20,16 @@ export default function UsersIndex() {
       }
     } else {
       console.error('Token is not available.');
+    }
+  };
+
+  const deleteUser = async (id) => {
+    try {
+      await apiClient.delete(`/api/admin/users/${id}`);
+
+      fetchUsers();
+    } catch (error) {
+      console.error('Error deleting user!');
     }
   };
 
@@ -70,7 +78,10 @@ export default function UsersIndex() {
                           >
                             EDIT
                           </Link>
-                          <button className="btn btn-sm btn-danger rounded-sm shadow border-0">
+                          <button
+                            onClick={() => deleteUser(user.id)}
+                            className="btn btn-sm btn-danger rounded-sm shadow border-0"
+                          >
                             DELETE
                           </button>
                         </td>
