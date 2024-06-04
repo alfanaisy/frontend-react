@@ -14,7 +14,7 @@ export default function SidebarMenu() {
 
     setAuthenticated(false);
 
-    navigate('/login', { replace: true });
+    navigate('/auth/login', { replace: true });
   };
 
   return (

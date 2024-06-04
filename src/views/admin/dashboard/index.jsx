@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import SidebarMenu from '../../../components/SidebarMenu';
 import Cookies from 'js-cookie';
 
 export default function Dashboard() {
@@ -14,19 +13,10 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="container my-5">
-      <div className="row">
-        <div className="col-md-3">
-          <SidebarMenu />
-        </div>
-        <div className="col-md-9">
-          <div className="card border-0 rounded shadow-sm">
-            <div className="card-header">DASHBOARD</div>
-            <div className="card-body">
-              Selamat datang, <strong>{user.name}</strong>
-            </div>
-          </div>
-        </div>
+    <div className="card border-0 rounded shadow-sm">
+      <div className="card-header">DASHBOARD</div>
+      <div className="card-body">
+        Selamat datang, <strong>{user.name}</strong>
       </div>
     </div>
   );

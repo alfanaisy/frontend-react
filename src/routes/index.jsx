@@ -1,72 +1,38 @@
-import { useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import AuthLayout from '../views/auth/authLayout';
+import Login from '../views/auth/login';
+import Register from '../views/auth/register';
 import Home from '../views/home';
-import Register from '../views/auth/register.jsx';
-import Login from '../views/auth/login.jsx';
-import Dashboard from '../views/admin/dashboard/index.jsx';
-import UsersIndex from '../views/admin/users/index.jsx';
-import UsersCreate from '../views/admin/users/create.jsx';
-import UsersEdit from '../views/admin/users/edit.jsx';
+import AdminLayout from '../views/admin/adminLayout';
+import Dashboard from '../views/admin/dashboard';
+import UsersIndex from '../views/admin/users';
+import UsersCreate from '../views/admin/users/create';
+import UsersEdit from '../views/admin/users/edit';
 
 function AppRoutes() {
-  const { isAuthenticated } = useContext(AuthContext);
+  const router = createBrowserRouter([
+    { path: '/', element: <Home /> },
+    {
+      path: '/auth',
+      element: <AuthLayout />,
+      children: [
+        { path: 'login', element: <Login /> },
+        { path: 'register', element: <Register /> },
+      ],
+    },
+    {
+      path: '/admin',
+      element: <AdminLayout />,
+      children: [
+        { path: 'dashboard', element: <Dashboard /> },
+        { path: 'users', element: <UsersIndex /> },
+        { path: 'users/create', element: <UsersCreate /> },
+        { path: 'users/edit/:id', element: <UsersEdit /> },
+      ],
+    },
+  ]);
 
-  return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-
-      <Route
-        path="/register"
-        element={
-          isAuthenticated ? (
-            <Navigate to="/admin/dashboard" replace />
-          ) : (
-            <Register />
-          )
-        }
-      />
-
-      <Route
-        path="/login"
-        element={
-          isAuthenticated ? (
-            <Navigate to="/admin/dashboard" replace />
-          ) : (
-            <Login />
-          )
-        }
-      />
-
-      <Route
-        path="/admin/dashboard"
-        element={
-          isAuthenticated ? <Dashboard /> : <Navigate to="/login" replace />
-        }
-      />
-
-      <Route
-        path="/admin/users"
-        element={
-          isAuthenticated ? <UsersIndex /> : <Navigate to="/login" replace />
-        }
-      />
-
-      <Route
-        path="/admin/users/create"
-        element={
-          isAuthenticated ? <UsersCreate /> : <Navigate to="/login" replace />
-        }
-      />
-
-      <Route
-        path="/admin/users/edit/:id"
-        element={
-          isAuthenticated ? <UsersEdit /> : <Navigate to="/login" replace />
-        }
-      />
-    </Routes>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default AppRoutes;
